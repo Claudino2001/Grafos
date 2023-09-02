@@ -106,6 +106,7 @@ void aloca_vertices_grafo(FILE **arq, Grafo *gr){
     char *t;
     for(i=0; i < (gr->num_vertices) - 1; i++){
         gr->raiz[i].num_graus = 0; // Todos os vertices iniciam com grau zero
+        gr->raiz[i].num_aresta = 0;
         if(flag == 0){
             t = strtok(linha, " ");
             strcpy(gr->raiz[i].rotulo, t); // Inserindo em cada vertice o seu nome
@@ -120,6 +121,7 @@ void aloca_vertices_grafo(FILE **arq, Grafo *gr){
     strcpy(gr->raiz[i].rotulo, t);
     
     gr->raiz[i].num_graus = 0; // Todos os vertices iniciam com grau zero
+    gr->raiz[i].num_aresta = 0;
 
     // Printando todos os vertice e seus rotulos.
             // for(i=0; i< gr->num_vertices; i++){
@@ -160,6 +162,7 @@ void insere_vertice(Grafo *gr, char *linha, Vertice *vertice){
                 novo_no->vertice = &gr->raiz[i];
                 no->prox_no = novo_no;
                 no = novo_no;
+                vertice->num_aresta++;
 
                 if(vertice != &gr->raiz[i]){
                     gr->raiz[i].num_graus++;
@@ -178,6 +181,8 @@ void insere_vertice(Grafo *gr, char *linha, Vertice *vertice){
                 no->prox_no = novo_no;
                 no = novo_no;
 
+                vertice->num_aresta++;
+
                 if(vertice != &gr->raiz[i]){
                     gr->raiz[i].num_graus++;
                     gr->num_aresta++;
@@ -195,6 +200,8 @@ void insere_vertice(Grafo *gr, char *linha, Vertice *vertice){
         novo_no->vertice = &gr->raiz[i];
         no->prox_no = novo_no;
         no = novo_no;
+        
+        vertice->num_aresta++;
 
         if(vertice != &gr->raiz[i]){
             gr->raiz[i].num_graus++;
@@ -216,7 +223,7 @@ void imprime_grafo(Grafo *gr){
         No *no = vertice_aux->lista_adjacentes;
         printf("Vertice: %s\n", vertice_aux->rotulo);
         while (no->prox_no != NULL) {
-            printf("%s -> %s | Num Grau: %d\n", gr->raiz[i].rotulo, no->prox_no->vertice->rotulo, gr->raiz[i].num_graus);
+            printf("%s -> %s | Num Grau: %d | Num Arestas: %d\n", gr->raiz[i].rotulo, no->prox_no->vertice->rotulo, gr->raiz[i].num_graus, gr->raiz[i].num_aresta);
             no = no->prox_no;
         }
         printf("\n");

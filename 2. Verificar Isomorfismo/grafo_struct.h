@@ -10,6 +10,7 @@ typedef struct No {
 typedef struct Vertice{
     char rotulo[20];
     int num_graus;
+    int num_aresta;
     No* lista_adjacentes;
 } Vertice;
 

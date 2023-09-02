@@ -15,18 +15,17 @@ int main(void){
     inicializaGrafo(&arq1, &gr1);
     imprime_grafo(&gr1);
 
+    printf("---------------------------\n");
+
     inicializaGrafo(&arq2, &gr2);
-    //imprime_grafo(&gr2);
+    imprime_grafo(&gr2);
 
     fclose(arq1);
     fclose(arq2);
 
-    printf("V: %d | A: %d\n", same_vertices(&gr1, &gr2), same_arestas(&gr1, &gr2));
-
-    same_graus(&gr1, &gr2);
+    printf("V: %d | A: %d | ISOMORFO: %d\n", same_vertices(&gr1, &gr2), same_arestas(&gr1, &gr2), same_graus(&gr1, &gr2));
 
     printf("\nFinalizado!\n");
 
     return 0;
 }
-
