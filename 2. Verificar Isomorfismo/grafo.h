@@ -154,6 +154,8 @@ void insere_vertice(Grafo *gr, char *linha, Vertice *vertice){
     vertice->lista_adjacentes = aloca_no();
     No *no = (*vertice).lista_adjacentes;
 
+    no->vertice = vertice;
+
     for(i=0; i < (gr->num_vertices) - 1; i++){
         if(flag == 0){
             t = strtok(linha, " ");
@@ -223,7 +225,7 @@ void imprime_grafo(Grafo *gr){
         No *no = vertice_aux->lista_adjacentes;
         printf("Vertice: %s\n", vertice_aux->rotulo);
         while (no->prox_no != NULL) {
-            printf("%s -> %s | Num Grau: %d | Num Arestas: %d\n", gr->raiz[i].rotulo, no->prox_no->vertice->rotulo, gr->raiz[i].num_graus, gr->raiz[i].num_aresta);
+            printf("%s -> %s | Num Grau: %d | Num Arestas: %d", gr->raiz[i].rotulo, no->prox_no->vertice->rotulo, gr->raiz[i].num_graus, gr->raiz[i].num_aresta);
             no = no->prox_no;
         }
         printf("\n");
