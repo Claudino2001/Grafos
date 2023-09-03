@@ -1,3 +1,10 @@
+/**********************************
+Teoria dos Grafos
+Biblioteca Isomorfismo
+Aluno: Gabriel Claudino
+Data:  03/09/2023
+***********************************/
+
 #ifndef GRAFO_ISOMORFO
 #define GRAFO_ISOMORFO
 
@@ -17,13 +24,14 @@ int same_arestas(Grafo *gr1, Grafo *gr2);
 // Mapea o grafo retornando index referente a poisição d amatriz
 int mapeando_vertices(Vertice *vertice, Grafo *gr);
 
-int checa_vizinhos_correspondendes(Vertice *vertice1, Vertice *vertice2);
-
 int em_ordem(Grafo *gr, Vertice *vertice_chegada, int start);
 
-int same_graus(Grafo *gr1, Grafo *gr2);
+// Verifica se os Grafos tem vertices iguais entre si
+int grafos_vertices_iguais(Grafo *gr1, Grafo *gr2);
 
-
+// Verifica se um determiando vertice do GR1 possui os mesmos vizinhos que um determinado vertice no GR2.
+// Verifica tambem se existe os mesmos caminhos em ambos.
+int isIsomorfo(Grafo *gr1, Grafo *gr2);
 
 // *** Desenvolvendo as funções ***
 
@@ -39,9 +47,11 @@ int same_arestas(Grafo *gr1, Grafo *gr2){
     return FALSE;
 }
 
-int same_graus(Grafo *gr1, Grafo *gr2){
-    if(!same_vertices(gr1, gr2) && !same_arestas(gr1, gr2))
+int isIsomorfo(Grafo *gr1, Grafo *gr2){
+    if(!same_vertices(gr1, gr2) && !same_arestas(gr1, gr2) && (!grafos_vertices_iguais(gr1, gr2)))
         return FALSE;
+
+    printf("VAI SE FUDER JACK\n");
 
     int array_vizinhos[gr1->num_vertices];
     int array_vizinhos2[gr1->num_vertices];
@@ -99,7 +109,7 @@ int same_graus(Grafo *gr1, Grafo *gr2){
 
     array_vizinhos2[maior_grau_index] = 1;
 
-    /////////////////////////////////////////
+    //////////////////// era para ter criado uma função ////////////////////////
 
     no_aux = gr2->raiz[maior_grau_index].lista_adjacentes;
     
@@ -185,6 +195,29 @@ int em_ordem(Grafo *gr, Vertice *vertice_chegada, int start){
         count++;
     }
     return FALSE;
+}
+
+int grafos_vertices_iguais(Grafo *gr1, Grafo *gr2){
+    printf("entrei\n");
+    int array_visitados[gr2->num_vertices];
+    memset(array_visitados, 0, sizeof(array_visitados));
+    int i, j, flag = 0;
+    for(i=0; i<gr1->num_vertices; i++){
+        printf("entrei2\n");
+        flag = 1;
+        for(j=0; j<gr2->num_vertices; j++){
+            printf("entrei3\n");
+            if((gr1->raiz[i].num_graus == gr2->raiz[j].num_graus) && (gr1->raiz[i].num_aresta == gr2->raiz[j].num_aresta) && (!array_visitados[j])){
+                printf("entrei4\n");
+                array_visitados[j] = 1;
+                flag = 0;
+                break;
+            }
+        }
+        if(flag)
+            return FALSE;
+    }
+    return TRUE;
 }
 
 #endif

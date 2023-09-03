@@ -23,7 +23,7 @@ int main(void){
     fclose(arq1);
     fclose(arq2);
 
-    printf("V: %d | A: %d | ISOMORFO: %d\n", same_vertices(&gr1, &gr2), same_arestas(&gr1, &gr2), same_graus(&gr1, &gr2));
+    printf("\n*** ISOMORFO: %d ***\n", isIsomorfo(&gr1, &gr2));
 
     printf("\nFinalizado!\n");
 
