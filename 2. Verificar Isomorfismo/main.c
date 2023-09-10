@@ -25,6 +25,13 @@ int main(void){
 
     printf("\n*** ISOMORFO: %d ***\n", isIsomorfo(&gr1, &gr2));
 
+    if(isIsomorfo(&gr1, &gr2)){
+        printf("Sao isomorfos!\n");
+        print_func_isomorfismo(&gr1, &gr2);
+    }
+    else
+        printf("Nao sao isomorfos!\n");
+
     printf("\nFinalizado!\n");
 
     return 0;

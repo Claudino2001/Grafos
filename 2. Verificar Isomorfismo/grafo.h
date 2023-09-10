@@ -213,7 +213,6 @@ void insere_vertice(Grafo *gr, char *linha, Vertice *vertice){
             gr->num_aresta += 2;
         }
     }
-
 }
 
 void imprime_grafo(Grafo *gr){

@@ -33,6 +33,9 @@ int grafos_vertices_iguais(Grafo *gr1, Grafo *gr2);
 // Verifica tambem se existe os mesmos caminhos em ambos.
 int isIsomorfo(Grafo *gr1, Grafo *gr2);
 
+// Função de Isomorfismo
+void print_func_isomorfismo(Grafo *gr1, Grafo *gr2);
+
 // *** Desenvolvendo as funções ***
 
 int same_vertices(Grafo *gr1, Grafo *gr2){
@@ -50,8 +53,6 @@ int same_arestas(Grafo *gr1, Grafo *gr2){
 int isIsomorfo(Grafo *gr1, Grafo *gr2){
     if(!same_vertices(gr1, gr2) && !same_arestas(gr1, gr2) && (!grafos_vertices_iguais(gr1, gr2)))
         return FALSE;
-
-    printf("VAI SE FUDER JACK\n");
 
     int array_vizinhos[gr1->num_vertices];
     int array_vizinhos2[gr1->num_vertices];
@@ -83,7 +84,7 @@ int isIsomorfo(Grafo *gr1, Grafo *gr2){
     
     j=0;
     while(no_aux->prox_no != NULL){
-        printf("Rotulo do vertice que bie quer saber: %s\n", no_aux->vertice->rotulo);
+        printf("Rotulo do vertice: %s\n", no_aux->vertice->rotulo);
         valores1[j++] = em_ordem(gr1, &gr1->raiz[maior_grau_index], mapeando_vertices(no_aux->prox_no->vertice, gr1));
         no_aux = no_aux->prox_no;
     }
@@ -115,7 +116,7 @@ int isIsomorfo(Grafo *gr1, Grafo *gr2){
     
     j=0;
     while(no_aux->prox_no != NULL){
-        printf("Rotulo do vertice que bie quer saber: %s\n", no_aux->vertice->rotulo);
+        printf("Rotulo do vertice: %s\n", no_aux->vertice->rotulo);
         valores2[j++] = em_ordem(gr2, &gr2->raiz[maior_grau_index], mapeando_vertices(no_aux->prox_no->vertice, gr2));
         no_aux = no_aux->prox_no;
     }
@@ -198,17 +199,13 @@ int em_ordem(Grafo *gr, Vertice *vertice_chegada, int start){
 }
 
 int grafos_vertices_iguais(Grafo *gr1, Grafo *gr2){
-    printf("entrei\n");
     int array_visitados[gr2->num_vertices];
     memset(array_visitados, 0, sizeof(array_visitados));
     int i, j, flag = 0;
     for(i=0; i<gr1->num_vertices; i++){
-        printf("entrei2\n");
         flag = 1;
         for(j=0; j<gr2->num_vertices; j++){
-            printf("entrei3\n");
             if((gr1->raiz[i].num_graus == gr2->raiz[j].num_graus) && (gr1->raiz[i].num_aresta == gr2->raiz[j].num_aresta) && (!array_visitados[j])){
-                printf("entrei4\n");
                 array_visitados[j] = 1;
                 flag = 0;
                 break;
@@ -218,6 +215,98 @@ int grafos_vertices_iguais(Grafo *gr1, Grafo *gr2){
             return FALSE;
     }
     return TRUE;
+}
+
+void print_func_isomorfismo(Grafo *gr1, Grafo *gr2){
+    int i, j;
+
+    // fila 01
+    int maior_grau = gr1->raiz[0].num_graus;
+    int maior_grau_index = 0;
+
+    for(j=1; j<gr1->num_vertices; j++){
+        if(gr1->raiz[j].num_graus > maior_grau){
+            maior_grau = gr1->raiz[j].num_graus;
+            maior_grau_index = j;
+        }
+    }
+
+    tp_fila fila;
+    inicializa_fila(&fila);
+    insere_fila(&fila, maior_grau_index);
+
+    // fila 02
+    maior_grau = gr2->raiz[0].num_graus;
+    int maior_grau_index2 = 0;
+
+    for(j=1; j<gr2->num_vertices; j++){
+        if(gr2->raiz[j].num_graus > maior_grau){
+            maior_grau = gr2->raiz[j].num_graus;
+            maior_grau_index2 = j;
+        }
+    }
+
+    tp_fila fila2;
+    inicializa_fila(&fila2);
+    insere_fila(&fila2, maior_grau_index2);
+
+    ////---------------------////
+    int array_vizinhos[gr1->num_vertices];
+    memset(array_vizinhos, 0, sizeof(array_vizinhos));
+
+    int array_vizinhos2[gr2->num_vertices];
+    memset(array_vizinhos2, 0, sizeof(array_vizinhos2));
+
+    int count = 0;
+
+    array_vizinhos[maior_grau_index] = 1;
+
+    array_vizinhos2[maior_grau_index2] = 1;
+
+    Vertice **vertices1, **vertices2;
+
+    printf("\t(%s <-> %s)\n", gr1->raiz[maior_grau_index].rotulo, gr2->raiz[maior_grau_index2].rotulo);
+
+    while(!fila_vazia(&fila)){
+        int start1, start2;
+        remove_fila(&fila, &start1);
+        remove_fila(&fila2, &start2);
+        No *no_aux1, *no_aux2;
+        no_aux1 = gr1->raiz[start1].lista_adjacentes;
+        no_aux2 = gr2->raiz[start2].lista_adjacentes;
+        
+        int p, aux = 0;
+        vertices1 = (Vertice **) malloc(sizeof(Vertice ) * no_aux1->vertice->num_graus);
+        vertices2 = (Vertice **) malloc(sizeof(Vertice ) * no_aux2->vertice->num_graus);
+
+        for(p=0; p<gr1->raiz[start1].num_aresta; p++){
+            no_aux1 = no_aux1->prox_no;
+            int v = mapeando_vertices(no_aux1->vertice, gr1);
+
+            if((!array_vizinhos[v])){
+                vertices1[aux++] = no_aux1->vertice;
+                insere_fila(&fila, v);
+                array_vizinhos[v] = 1;
+            }
+        }
+
+        aux = 0;
+        for(p=0; p<gr2->raiz[start2].num_aresta; p++){
+            no_aux2 = no_aux2->prox_no;
+            int v = mapeando_vertices(no_aux2->vertice, gr2);
+
+            if((!array_vizinhos2[v])){
+                vertices2[aux++] = no_aux2->vertice;
+                insere_fila(&fila2, v);
+                array_vizinhos2[v] = 1;
+            }
+        }
+
+        for (p=0; p<aux; p++){
+            printf("(%s <-> %s) ", vertices1[p]->rotulo, vertices2[p]->rotulo);
+        }
+    }
+
 }
 
 #endif
