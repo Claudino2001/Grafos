@@ -15,7 +15,7 @@ int main(void){
     inicializaGrafo(&arq1, &gr1);
     imprime_grafo(&gr1);
 
-    //printf("---------------------------\n");
+    printf("---------------------------\n");
 
     inicializaGrafo(&arq2, &gr2);
     imprime_grafo(&gr2);
@@ -23,6 +23,9 @@ int main(void){
     fclose(arq1);
     fclose(arq2);
 
+    int g;
+    scanf("%d", &g);
+    
     printf("\n*** ISOMORFO: %d ***\n", isIsomorfo(&gr1, &gr2));
 
     if(isIsomorfo(&gr1, &gr2)){
