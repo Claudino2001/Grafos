@@ -1,4 +1,5 @@
 #include "grafo.h"
+#include "flooding.h"
 #include "prim.h"
 
 int main(void) {
@@ -10,9 +11,13 @@ int main(void) {
     Grafo grafo;
 
     inicializaGrafo(&arq, &grafo);
-    //imprime_grafo(&grafo);
 
-    prim(&grafo);
+    if(conta_conexo(&grafo) != 1){
+        printf("Não existe um árvore geradora minima.\n");
+        return 0;
+    }else{
+        prim(&grafo);
+    }
 
     return 0;
 }
