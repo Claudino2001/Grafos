@@ -1,3 +1,10 @@
+/*
+Equipe:
+    Arthur Sant'Anna
+    Bernardo Resende
+    Gabriel Claudino
+*/
+
 #include "grafo.h"
 #include "flooding.h"
 #include "prim.h"
