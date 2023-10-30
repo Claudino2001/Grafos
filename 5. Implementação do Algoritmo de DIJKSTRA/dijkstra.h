@@ -1,65 +1,54 @@
 #ifndef DIJKSTRA
 #define DIJKSTRA
 
-int mpv(Vertice *vertice, Grafo *gr);
-
-void dijstra(Grafo *gr, Vertice *v_partida, Vertice *v_chegada){
+void dijkstra(Grafo *gr, Vertice *v_partida, Vertice *v_chegada){
     int i, j;
     int n = gr->num_vertices;
     
-    int distancia[n];
-    int caminho[n];
-    int visitado[n];
+    int distancia[n];   // Criando um vetor para armazenar as distancia entre os vertices
+    int caminho[n];     // Criando um vetor para armazenar o caminho para os vertices
+    int visitado[n];    // Criando um vetor para marcar os vertices que ja foram visitados
 
-    memset(distancia, 0x3f, sizeof(distancia));
-    memset(caminho, -1, sizeof(caminho));
-    memset(visitado, 0, sizeof(visitado));
+    memset(distancia, 0x3f, sizeof(distancia));     // Povoando o vertice com uma distancia infinita. 
+    memset(caminho, -1, sizeof(caminho));           // Preenche os caminhos com -1 pq eu ainda n sei os valores
+    memset(visitado, 0, sizeof(visitado));          // Marcando todos como não visitados
 
-    distancia[mpv(v_partida, gr)] = 0;
+    distancia[mapeando_vertices(v_partida, gr)] = 0;    // O vertice de partida tem distancia ZERO
 
     for(i=0; i<n; i++){
-        int vertice = -1;
+        int vertice = -1;   // Para saber se ainda esxite vertices disponiveis para explorar
         for(j=0; j<n; j++){
-            if(!visitado[j] && (vertice == -1 || distancia[j] < distancia[vertice])){
+            if(!visitado[j] && (vertice == -1 || distancia[j] < distancia[vertice])){   // Encontra o vertice cujo a distancia a partir do primeiro é a mais curta dos vertices ajds disponiveis.
                 vertice = j;
             }
         }
 
-        if(distancia[vertice] == 0x3f){
+        if(distancia[vertice] == 0x3f){     // Se o valor da distancia do até o vertice escolhido for infinito, quer dizer que não há caminho.
             printf("Não existe um caminho possível.\n");
             break;
         }
-        visitado[vertice] = 1;
+        visitado[vertice] = 1;      // Marca o cara como visitado.
         No *no = gr->raiz[vertice].lista_adjacentes;
         
         while (no->prox_no != NULL) {
             No *no_aux = no->prox_no;
-            if(distancia[vertice] + no->peso < distancia[mpv(no_aux->vertice, gr)]){
-                distancia[mpv(no_aux->vertice, gr)] = distancia[vertice] + no->peso;
-                caminho[mpv(no_aux->vertice, gr)] = vertice;
+            if(distancia[vertice] + no->peso < distancia[mapeando_vertices(no_aux->vertice, gr)]){  // Se a distancia do vertice escolhido + o peso da aresta para o proximo vertice adjc a ele for menor que a distancia desse proximo vertice. Executa o if.
+                distancia[mapeando_vertices(no_aux->vertice, gr)] = distancia[vertice] + no->peso;  // Grava o valor do distancia do proximo vertice.
+                caminho[mapeando_vertices(no_aux->vertice, gr)] = vertice;                          // Grava o caminho.
             }
             no = no->prox_no;
         }
         
     }
 
-    int x = mpv(v_chegada, gr);
+    // Imprime o caminhio minimo
+    int x = mapeando_vertices(v_chegada, gr);
     while (caminho[x] != -1) {
         printf("%s <- ", gr->raiz[x].rotulo);
         x = caminho[x];
     }
     printf("%s", v_partida->rotulo);
     printf("\n");
-}
-
-int mpv(Vertice *vertice, Grafo *gr){ //mapeando vertices
-    int i;
-    for(i=0; i<gr->num_vertices; i++){
-        if(vertice == &gr->raiz[i]){
-            return i;
-        }
-    }
-    return -1;
 }
 
 #endif

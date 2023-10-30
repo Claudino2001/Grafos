@@ -6,7 +6,7 @@ int main(void) {
     FILE *arq;
 
     arq = fopen("input.txt", "rt");
-    
+
     Grafo grafo;
 
     inicializaGrafo(&arq, &grafo);
@@ -15,7 +15,7 @@ int main(void) {
         printf("Não existe um árvore geradora minima.\n");
         return 0;
     }else{
-        dijstra(&grafo, &grafo.raiz[3], &grafo.raiz[0]);
+        dijkstra(&grafo, &grafo.raiz[3], &grafo.raiz[0]);
     }
 
     return 0;
